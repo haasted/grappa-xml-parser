@@ -15,63 +15,63 @@ import org.parboiled.support.Var;
 @BuildParseTree 
 public class SimpleXMLParser extends BaseParser<XmlNode> {
     Rule Document() {    	
-    	return Sequence(createDocument, Element());
+    	return sequence(createDocument, Element());
     }
     
     Rule Element() {
     	StringVar id = new StringVar();    	
     	return     		
-			FirstOf(
-				Sequence(OpenElement(id), ElementContent(), CloseElement(id), attachToParent),
-				Sequence(ClosedElement(), attachToParent)
+			firstOf(
+				sequence(OpenElement(id), ElementContent(), CloseElement(id), attachToParent),
+				sequence(ClosedElement(), attachToParent)
 			);
 		    	
     }
     
     Rule OpenElement(StringVar id) {    	
-    	return Sequence('<', Identifier(), id.set(match()), createElement(id), ElementAttributes(), OptionalWhitespace(), '>');
+    	return sequence('<', Identifier(), id.set(match()), createElement(id), ElementAttributes(), OptionalWhitespace(), '>');
     }
     
     Rule ClosedElement() {
     	StringVar id = new StringVar();
-    	return Sequence('<', Identifier(), id.set(match()), createElement(id), ElementAttributes(), OptionalWhitespace(), "/>");
+    	return sequence('<', Identifier(), id.set(match()), createElement(id), ElementAttributes(), OptionalWhitespace(), "/>");
     }
     
     Rule ElementAttributes() {
     	Var<XmlElementAttribute> attr = new Var<XmlElementAttribute>();
-    	return ZeroOrMore(OptionalWhitespace(), Identifier(), createElementAttribute(attr), Optional(ElementAttributeValue(attr)), insertElementAttribute(attr));
+    	return zeroOrMore(OptionalWhitespace(), Identifier(), createElementAttribute(attr), optional(ElementAttributeValue(attr)), insertElementAttribute(attr));
     }
     
     Rule ElementAttributeValue(Var<XmlElementAttribute> attr) {
     	// Change content rule
-    	return Sequence("=",'"', AttributeContent(), recordElementAttributeValue(attr), '"');
+    	return sequence("=",'"', AttributeContent(), recordElementAttributeValue(attr), '"');
     }
     
     Rule CloseElement(StringVar id) {    
-    	return Sequence("</", Optional(Identifier()), matchStringVar(id), '>');
+    	return sequence("</", optional(Identifier()), matchStringVar(id), '>');
     }
         
 	Rule ElementContent() {
-    	return ZeroOrMore(FirstOf(Text(), Element()));
+    	return zeroOrMore(firstOf(Text(), Element()));
     }
 	
 	@SuppressSubnodes
 	Rule Text() {
-		return Sequence(OneOrMore(NoneOf("<>")), createTextNode);
+		return sequence(oneOrMore(noneOf("<>")), createTextNode);
 	}
     
 	@SkipNode
 	Rule OptionalWhitespace() {
-		return ZeroOrMore(AnyOf(" \t\f"));
+		return zeroOrMore(anyOf(" \t\f"));
 	}
 	
 	@SuppressSubnodes
     Rule Identifier() {
-        return OneOrMore(FirstOf( CharRange('A', 'z'), CharRange('0', '9') ));
+        return oneOrMore(firstOf( charRange('A', 'z'), charRange('0', '9') ));
     }    
     
     Rule AttributeContent() {
-    	return ZeroOrMore(NoneOf("\""));
+    	return zeroOrMore(noneOf("\""));
     }
     
     /* ----- ACTIONS  ------ */    

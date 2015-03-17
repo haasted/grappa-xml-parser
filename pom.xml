@@ -6,10 +6,10 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
-			<groupId>org.parboiled</groupId>
-			<artifactId>parboiled-java</artifactId>
-			<version>1.1.7</version>
-		</dependency>
+			<groupId>com.github.parboiled1</groupId>
+			<artifactId>grappa</artifactId>
+			<version>1.0.4</version>
+		</dependency> 	
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>

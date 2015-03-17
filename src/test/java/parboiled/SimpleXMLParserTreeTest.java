@@ -1,14 +1,10 @@
 package parboiled;
 
-import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +14,6 @@ import org.junit.runners.Parameterized.Parameters;
 import org.parboiled.Parboiled;
 import org.parboiled.parserunners.AbstractParseRunner;
 import org.parboiled.parserunners.ReportingParseRunner;
-import org.parboiled.parserunners.TracingParseRunner;
 import org.parboiled.support.ParsingResult;
 
 import com.google.common.collect.Lists;
