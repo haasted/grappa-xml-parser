@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -33,17 +34,21 @@ public class SimpleXMLParserTreeTest {
 		
 	@Parameters(name = "{index}: {0}")
 	public static Iterable<Object[]> inputs() {
-		List<Object[]> result = Lists.newArrayList();
-
-		result.add( new Object[] { "<a><b/></a>", 2 } );
-		result.add( new Object[] { "<a><b></b></a>", 2 } );
-		result.add( new Object[] { "<c> This is content </c>", 2 } );
-		result.add( new Object[] { "<c> This is content <b /></c>", 3 } );
-		result.add( new Object[] { "<c> This is content <b></b> </c>", 4 } );
-		result.add( new Object[] { "<c> This is content <b /> </c>", 4 } );
-		result.add( new Object[] { "<a><b><c><d /></c></b></a>", 4 } );
+		// Desperately attempt at finding a shorthand notation for this.
+		return new ArrayList<Object[]>() {{
+				_("<a><b/></a>", 2);
+				_("<a><b></b></a>", 2);
+				_( "<c> This is content </c>", 2 );
+				_( "<c> This is content <b /></c>", 3 );
+				_( "<c> This is content <b></b> </c>", 4 );
+				_( "<c> This is content <b /> </c>", 4 );
+				_( "<a><b><c><d /></c></b></a>", 4 );				
+			}
 		
-		return result;
+			void _(String s, int count) {
+				this.add(new Object[] { s, count});
+			}
+		};	
 	}
 	
 	final String input;
