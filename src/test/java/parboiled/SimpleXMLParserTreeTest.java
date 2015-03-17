@@ -45,8 +45,8 @@ public class SimpleXMLParserTreeTest {
 				_( "<a><b><c><d /></c></b></a>", 4 );				
 			}
 		
-			void _(String s, int count) {
-				this.add(new Object[] { s, count});
+			void _(Object ... args) {
+				this.add(args);
 			}
 		};	
 	}
