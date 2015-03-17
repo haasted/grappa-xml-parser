@@ -1,6 +1,7 @@
 package parboiled;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -62,13 +63,7 @@ public class SimpleXMLParserTest2 {
 		String input = "<a attr1 attr1></a>";
 		ParsingResult<XmlNode> result = runner.run(input);
 		
-		assertTrue(result.matched);
-		
-		XmlElement el = (XmlElement) result.resultValue.children.get(0);
-		assertEquals(1, el.attributes.size());
-		
-		assertEquals("attr1", Iterables.get(el.attributes, 0).id);  
-		assertNull(Iterables.get(el.attributes, 0).value);
+		assertFalse(result.matched); // Two identically named attributes. 
 	}	
 	
 	@Test
@@ -76,13 +71,7 @@ public class SimpleXMLParserTest2 {
 		String input = "<a attr1=\"val1\" attr1></a>";
 		ParsingResult<XmlNode> result = runner.run(input);
 		
-		assertTrue(result.matched);
-		
-		XmlElement el = (XmlElement) result.resultValue.children.get(0);
-		assertEquals(1, el.attributes.size());
-		
-		assertEquals("attr1", Iterables.get(el.attributes, 0).id); 		
-		assertEquals("val1", Iterables.get(el.attributes, 0).value); 
+		assertFalse(result.matched); // Two identically named attributes.		 
 	}	
 	
 	@Test

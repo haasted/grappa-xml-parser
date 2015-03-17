@@ -136,9 +136,7 @@ public class SimpleXMLParser extends BaseParser<XmlNode> {
 		return new Action<XmlNode>() {
 			public boolean run(Context<XmlNode> ctx) {
 				XmlElement currentElement = (XmlElement) peek();		
-				currentElement.attributes.add(attributeVar.get());
-
-				return true;
+				return currentElement.attributes.add(attributeVar.get());
 			}
 			
 			@Override
