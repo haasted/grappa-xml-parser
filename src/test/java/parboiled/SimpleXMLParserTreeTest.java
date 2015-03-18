@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,8 +16,6 @@ import org.parboiled.parserunners.AbstractParseRunner;
 import org.parboiled.parserunners.ReportingParseRunner;
 import org.parboiled.support.ParsingResult;
 
-import com.google.common.collect.Lists;
-
 @RunWith(Parameterized.class)
 public class SimpleXMLParserTreeTest {
 	private static AbstractParseRunner<XmlNode> runner;
@@ -27,14 +24,12 @@ public class SimpleXMLParserTreeTest {
 	public void setup() {
 		SimpleXMLParser parser = Parboiled.createParser(SimpleXMLParser.class);
 		runner = new ReportingParseRunner<XmlNode>(parser.Document());
-//		runner = new TracingParseRunner<XmlElement>(parser.Document());
-		
-//		System.out.println(format("\n --- %s :",	 input));
+//		runner = new TracingParseRunner<XmlElement>(parser.Document());		
 	}
 		
 	@Parameters(name = "{index}: {0}")
 	public static Iterable<Object[]> inputs() {
-		// Desperately attempt at finding a shorthand notation for this.
+		// Desperate attempt at finding a shorthand notation for test specifications.
 		return new ArrayList<Object[]>() {{
 				_("<a><b/></a>", 2);
 				_("<a><b></b></a>", 2);
@@ -72,9 +67,6 @@ public class SimpleXMLParserTreeTest {
 			assertEquals(1, resultValue.children.size());
 			
 			resultValue = resultValue.children.get(0); // Ignore document wrapper when counting nodes.
-			
-	//		System.out.println(resultValue);
-	//		System.out.println(format("Nodes: %s expected, %s found", nodeCount, countNodesInTree(resultValue)));
 			assertEquals(nodeCount, countNodesInTree(resultValue));		
 		} catch(AssertionError e) {
 			if (resultValue != null) {
