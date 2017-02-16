@@ -31,16 +31,16 @@ public class SimpleXMLParserTreeTest {
 	public static Iterable<Object[]> inputs() {
 		// Desperate attempt at finding a shorthand notation for test specifications.
 		return new ArrayList<Object[]>() {{
-				_("<a><b/></a>", 2);
-				_("<a><b></b></a>", 2);
-				_( "<c> This is content </c>", 2 );
-				_( "<c> This is content <b /></c>", 3 );
-				_( "<c> This is content <b></b> </c>", 4 );
-				_( "<c> This is content <b /> </c>", 4 );
-				_( "<a><b><c><d /></c></b></a>", 4 );				
+				__("<a><b/></a>", 2);
+				__("<a><b></b></a>", 2);
+				__( "<c> This is content </c>", 2 );
+				__( "<c> This is content <b /></c>", 3 );
+				__( "<c> This is content <b></b> </c>", 4 );
+				__( "<c> This is content <b /> </c>", 4 );
+				__( "<a><b><c><d /></c></b></a>", 4 );
 			}
 		
-			void _(Object ... args) {
+			void __(Object ... args) {
 				this.add(args);
 			}
 		};	
