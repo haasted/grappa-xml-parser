@@ -1,4 +1,4 @@
-package parboiled;
+package dk.bitcraft.grappa.xml;
 
 
 public class TextNode extends XmlNode {

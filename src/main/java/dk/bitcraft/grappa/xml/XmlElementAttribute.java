@@ -1,4 +1,4 @@
-package parboiled;
+package dk.bitcraft.grappa.xml;
 
 import static java.lang.String.format;
 

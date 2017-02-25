@@ -1,4 +1,4 @@
-package parboiled;
+package dk.bitcraft.grappa.xml;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 

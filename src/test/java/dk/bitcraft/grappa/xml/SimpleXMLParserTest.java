@@ -1,4 +1,4 @@
-package parboiled;
+package dk.bitcraft.grappa.xml;
 
 import static com.google.common.collect.Iterables.concat;
 import static com.google.common.collect.Lists.newArrayList;
