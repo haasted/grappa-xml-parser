@@ -1,25 +1,21 @@
 package dk.bitcraft.grappa.xml;
 
+import com.github.fge.grappa.parsers.BaseParser;
+import com.github.fge.grappa.rules.Action;
+import com.github.fge.grappa.rules.Rule;
+import com.github.fge.grappa.run.context.Context;
+import com.github.fge.grappa.support.StringVar;
+import com.github.fge.grappa.support.Var;
+
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import org.parboiled.Action;
-import org.parboiled.BaseParser;
-import org.parboiled.Context;
-import org.parboiled.Rule;
-import org.parboiled.annotations.BuildParseTree;
-import org.parboiled.annotations.SkipNode;
-import org.parboiled.annotations.SuppressSubnodes;
-import org.parboiled.support.StringVar;
-import org.parboiled.support.Var;
-
-@BuildParseTree 
 public class SimpleXMLParser extends BaseParser<XmlNode> {
     Rule Document() {    	
     	return sequence(createDocument, Element());
     }
     
     Rule Element() {
-    	StringVar id = new StringVar();    	
+    	StringVar id = new StringVar();
     	return     		
 			firstOf(
 				sequence(OpenElement(id), ElementContent(), CloseElement(id), attachToParent),
@@ -55,17 +51,14 @@ public class SimpleXMLParser extends BaseParser<XmlNode> {
     	return zeroOrMore(firstOf(Text(), Element()));
     }
 	
-	@SuppressSubnodes
 	Rule Text() {
 		return sequence(oneOrMore(noneOf("<>")), createTextNode);
 	}
     
-	@SkipNode
 	Rule OptionalWhitespace() {
 		return zeroOrMore(anyOf(" \t\f"));
 	}
 	
-	@SuppressSubnodes
     Rule Identifier() {
         return oneOrMore(firstOf( charRange('A', 'z'), charRange('0', '9') ));
     }    
@@ -77,7 +70,7 @@ public class SimpleXMLParser extends BaseParser<XmlNode> {
     /* ----- ACTIONS  ------ */    
     Action<XmlNode> debugAction(final String msg) {
 		return new Action<XmlNode>() {
-			public boolean run(Context<XmlNode> context) {				
+			public boolean run(Context<XmlNode> context) {
 				System.out.printf(" *** %s (%s) \n", msg, context.getValueStack().size());
 				return true;
 			}			

@@ -1,20 +1,21 @@
 package dk.bitcraft.grappa.xml;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import com.google.common.collect.Iterables;
 
-import java.util.Iterator;
+import com.github.fge.grappa.Grappa;
+import com.github.fge.grappa.run.AbstractParseRunner;
+import com.github.fge.grappa.run.ListeningParseRunner;
+import com.github.fge.grappa.run.ParsingResult;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.parboiled.Parboiled;
-import org.parboiled.parserunners.AbstractParseRunner;
-import org.parboiled.parserunners.ReportingParseRunner;
-import org.parboiled.support.ParsingResult;
 
-import com.google.common.collect.Iterables;
+
+import java.util.Iterator;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class SimpleXMLParserTest2 {
 
@@ -22,8 +23,9 @@ public class SimpleXMLParserTest2 {
 
 	@Before
 	public void setup() {
-		SimpleXMLParser parser = Parboiled.createParser(SimpleXMLParser.class);
-		runner = new ReportingParseRunner<XmlNode>(parser.Document());
+		SimpleXMLParser parser = Grappa.createParser(SimpleXMLParser.class);
+		runner = new ListeningParseRunner<XmlNode>(parser.Document());
+//		runner = new ReportingParseRunner<XmlNode>(parser.Document());
 //		runner = new TracingParseRunner<XmlNode>(parser.Document());
 	}
 	
@@ -33,9 +35,9 @@ public class SimpleXMLParserTest2 {
 		String input = "<a attr1></a>";
 		ParsingResult<XmlNode> result = runner.run(input);
 		
-		assertTrue(result.matched);
+		assertTrue(result.isSuccess());
 		
-		XmlElement el = (XmlElement) result.resultValue.children.get(0);
+		XmlElement el = (XmlElement) result.getTopStackValue().children.get(0);
 		assertEquals(1, el.attributes.size());		
 
 		XmlElementAttribute attribute = Iterables.getOnlyElement(el.attributes);
@@ -48,9 +50,9 @@ public class SimpleXMLParserTest2 {
 		String input = "<a attr1 attr2></a>";
 		ParsingResult<XmlNode> result = runner.run(input);
 		
-		assertTrue(result.matched);
+		assertTrue(result.isSuccess());
 		
-		XmlElement el = (XmlElement) result.resultValue.children.get(0);
+		XmlElement el = (XmlElement) result.getTopStackValue().children.get(0);
 		assertEquals(2, el.attributes.size());		
 		
 		assertEquals("attr1", Iterables.get(el.attributes, 0).id); 
@@ -63,7 +65,7 @@ public class SimpleXMLParserTest2 {
 		String input = "<a attr1 attr1></a>";
 		ParsingResult<XmlNode> result = runner.run(input);
 		
-		assertFalse(result.matched); // Two identically named attributes. 
+		assertFalse(result.isSuccess()); // Two identically named attributes.
 	}	
 	
 	@Test
@@ -71,7 +73,7 @@ public class SimpleXMLParserTest2 {
 		String input = "<a attr1=\"val1\" attr1></a>";
 		ParsingResult<XmlNode> result = runner.run(input);
 		
-		assertFalse(result.matched); // Two identically named attributes.		 
+		assertFalse(result.isSuccess()); // Two identically named attributes.
 	}	
 	
 	@Test
@@ -80,9 +82,9 @@ public class SimpleXMLParserTest2 {
 		
 		ParsingResult<XmlNode> result = runner.run(input);
 		
-		assertTrue(result.matched);
+		assertTrue(result.isSuccess());
 		
-		XmlElement el = (XmlElement) result.resultValue.children.get(0);
+		XmlElement el = (XmlElement) result.getTopStackValue().children.get(0);
 		assertEquals(4, el.attributes.size());
 		
 		Iterator<XmlElementAttribute> it = el.attributes.iterator();
@@ -98,9 +100,9 @@ public class SimpleXMLParserTest2 {
 		
 		ParsingResult<XmlNode> result = runner.run(input);
 		
-		assertTrue(result.matched);
+		assertTrue(result.isSuccess());
 		
-		XmlElement el = (XmlElement) result.resultValue.children.get(0);
+		XmlElement el = (XmlElement) result.getTopStackValue().children.get(0);
 		assertEquals(4, el.attributes.size());
 
 		Iterator<XmlElementAttribute> it = el.attributes.iterator();

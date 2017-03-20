@@ -1,20 +1,21 @@
 package dk.bitcraft.grappa.xml;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
+import com.github.fge.grappa.Grappa;
+import com.github.fge.grappa.run.AbstractParseRunner;
+import com.github.fge.grappa.run.ListeningParseRunner;
+import com.github.fge.grappa.run.ParsingResult;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.parboiled.Parboiled;
-import org.parboiled.parserunners.AbstractParseRunner;
-import org.parboiled.parserunners.ReportingParseRunner;
-import org.parboiled.support.ParsingResult;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class SimpleXMLParserTreeTest {
@@ -22,8 +23,8 @@ public class SimpleXMLParserTreeTest {
 
 	@Before
 	public void setup() {
-		SimpleXMLParser parser = Parboiled.createParser(SimpleXMLParser.class);
-		runner = new ReportingParseRunner<XmlNode>(parser.Document());
+		SimpleXMLParser parser = Grappa.createParser(SimpleXMLParser.class);
+		runner = new ListeningParseRunner<XmlNode>(parser.Document());
 //		runner = new TracingParseRunner<XmlElement>(parser.Document());		
 	}
 		
@@ -59,8 +60,8 @@ public class SimpleXMLParserTreeTest {
 		XmlNode resultValue = null;
 		try {			
 			ParsingResult<XmlNode> result = runner.run(input);
-			assertTrue(result.matched);
-			resultValue = result.resultValue;
+			assertTrue(result.isSuccess());
+			resultValue = result.getTopStackValue();
 			assertNotNull(resultValue);
 			
 			assertTrue(resultValue instanceof XmlDocument);

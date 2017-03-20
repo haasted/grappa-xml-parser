@@ -1,24 +1,26 @@
 package dk.bitcraft.grappa.xml;
 
-import static com.google.common.collect.Iterables.concat;
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Lists.transform;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.google.common.base.Function;
 
-import java.util.List;
+import com.github.fge.grappa.Grappa;
+import com.github.fge.grappa.run.AbstractParseRunner;
+import com.github.fge.grappa.run.ListeningParseRunner;
+import com.github.fge.grappa.run.ParsingResult;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.parboiled.Parboiled;
-import org.parboiled.parserunners.AbstractParseRunner;
-import org.parboiled.parserunners.TracingParseRunner;
-import org.parboiled.support.ParsingResult;
 
-import com.google.common.base.Function;
+
+import java.util.List;
+
+import static com.google.common.collect.Iterables.concat;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.transform;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class SimpleXMLParserTest {
@@ -27,9 +29,10 @@ public class SimpleXMLParserTest {
 
 	@Before
 	public void setup() {
-		SimpleXMLParser parser = Parboiled.createParser(SimpleXMLParser.class);
+		SimpleXMLParser parser = Grappa.createParser(SimpleXMLParser.class);
+		runner = new ListeningParseRunner<XmlNode>(parser.Document());
 //		runner = new ReportingParseRunner<XmlNode>(parser.Document());
-		runner = new TracingParseRunner<XmlNode>(parser.Document());
+//		runner = new TracingParseRunner<XmlNode>(parser.Document());
 	}
 	
 	@Parameters(name = "{index}: {0} [{1}]")
@@ -73,11 +76,11 @@ public class SimpleXMLParserTest {
 	
 	@Test
 	public void test() {
-		assertEquals(input, valid, runner.run(input).matched);
+		assertEquals(input, valid, runner.run(input).isSuccess());
 		
 		if (valid) {
-			ParsingResult<XmlNode> result = runner.run(input);			
-			XmlNode resultValue = result.resultValue;
+			ParsingResult<XmlNode> result = runner.run(input);
+			XmlNode resultValue = result.getTopStackValue();
 			System.out.println(resultValue.toString());
 			
 			assertTrue(resultValue instanceof XmlDocument);
